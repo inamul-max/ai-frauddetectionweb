@@ -272,7 +272,10 @@ const Dashboard = ({ user, token, onLogout }) => {
   const [stats, setStats] = useState(null);
   const [activeView, setActiveView] = useState("overview");
   const [verifyTransactionId, setVerifyTransactionId] = useState("");
+  const [bulkTransactionIds, setBulkTransactionIds] = useState("");
   const [verificationResult, setVerificationResult] = useState(null);
+  const [bulkVerificationResult, setBulkVerificationResult] = useState(null);
+  const [showAllTransactions, setShowAllTransactions] = useState(false);
   const [newTransaction, setNewTransaction] = useState({
     transaction_id: "",
     amount: "",
