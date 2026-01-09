@@ -101,18 +101,44 @@ const LandingPage = ({ onShowAuth }) => {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="bg-slate-900/50 border border-white/5 rounded-2xl p-8 backdrop-blur-sm hover:bg-slate-900/80">
-                <h3 className="font-chivo font-black text-2xl mb-4">Financial Fraud</h3>
-                <p className="text-muted-foreground">Detect unauthorized transactions, card fraud, and suspicious payment patterns.</p>
-              </div>
-              <div className="bg-slate-900/50 border border-white/5 rounded-2xl p-8 backdrop-blur-sm hover:bg-slate-900/80">
-                <h3 className="font-chivo font-black text-2xl mb-4">Identity Theft</h3>
-                <p className="text-muted-foreground">Identify account takeovers and identity verification issues.</p>
-              </div>
-              <div className="bg-slate-900/50 border border-white/5 rounded-2xl p-8 backdrop-blur-sm hover:bg-slate-900/80">
-                <h3 className="font-chivo font-black text-2xl mb-4">Insurance Claims</h3>
-                <p className="text-muted-foreground">Flag suspicious insurance claims and prevent fraud losses.</p>
+            <div className="mb-16">
+              <h3 className="text-3xl font-chivo font-black text-center mb-12">Comprehensive Fraud Detection</h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="bg-slate-900/50 border border-white/5 rounded-2xl p-8 backdrop-blur-sm hover:bg-slate-900/80 transition-all">
+                  <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4">
+                    <Shield className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="font-chivo font-black text-xl mb-3">Credit/Debit Card Fraud</h3>
+                  <p className="text-sm text-muted-foreground">Real-time detection of unauthorized card transactions, skimming, and stolen card usage patterns.</p>
+                </div>
+                <div className="bg-slate-900/50 border border-white/5 rounded-2xl p-8 backdrop-blur-sm hover:bg-slate-900/80 transition-all">
+                  <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4">
+                    <Activity className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="font-chivo font-black text-xl mb-3">Banking Fraud</h3>
+                  <p className="text-sm text-muted-foreground">Monitor suspicious account activity, unauthorized transfers, and unusual withdrawal patterns.</p>
+                </div>
+                <div className="bg-slate-900/50 border border-white/5 rounded-2xl p-8 backdrop-blur-sm hover:bg-slate-900/80 transition-all">
+                  <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4">
+                    <FileText className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="font-chivo font-black text-xl mb-3">Insurance Claim Fraud</h3>
+                  <p className="text-sm text-muted-foreground">Identify fraudulent insurance claims, exaggerated damages, and fake claim submissions.</p>
+                </div>
+                <div className="bg-slate-900/50 border border-white/5 rounded-2xl p-8 backdrop-blur-sm hover:bg-slate-900/80 transition-all">
+                  <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4">
+                    <User className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="font-chivo font-black text-xl mb-3">Identity Theft Detection</h3>
+                  <p className="text-sm text-muted-foreground">Detect account takeovers, synthetic identity fraud, and identity verification issues.</p>
+                </div>
+                <div className="bg-slate-900/50 border border-white/5 rounded-2xl p-8 backdrop-blur-sm hover:bg-slate-900/80 transition-all">
+                  <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center mb-4">
+                    <TrendingUp className="w-6 h-6 text-primary" />
+                  </div>
+                  <h3 className="font-chivo font-black text-xl mb-3">E-commerce/Payment Fraud</h3>
+                  <p className="text-sm text-muted-foreground">Stop chargeback fraud, account abuse, and fraudulent online purchase patterns.</p>
+                </div>
               </div>
             </div>
           </div>
