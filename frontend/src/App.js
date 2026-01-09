@@ -517,116 +517,196 @@ const Dashboard = ({ user, token, onLogout }) => {
             </div>
 
             {user.role === "user" && (
-              <Card className="bg-card border border-border rounded-xl p-6 mt-8">
-                <h3 className="text-xl font-chivo font-black mb-6">Submit New Transaction</h3>
-                <form onSubmit={submitTransaction} className="grid md:grid-cols-2 gap-4">
-                  <div className="md:col-span-2">
-                    <Label className="text-sm font-medium flex items-center gap-2">
-                      Transaction ID <span className="text-red-500">*</span>
-                      <span className="text-xs text-muted-foreground">(UPI ID / Payment Reference)</span>
-                    </Label>
-                    <Input
-                      data-testid="transaction-id-input"
-                      type="text"
-                      value={newTransaction.transaction_id}
-                      onChange={(e) => setNewTransaction({ ...newTransaction, transaction_id: e.target.value })}
-                      className="mt-2 font-mono"
-                      placeholder="e.g., 434567891234 or UPI12345678"
-                      required
-                    />
-                    <p className="text-xs text-muted-foreground mt-1">
-                      This ID verifies payment completion from your account to merchant
-                    </p>
+              <>
+                <Card className="bg-gradient-to-br from-blue-900/30 to-blue-950/50 border border-blue-800/50 rounded-xl p-6 mt-8">
+                  <div className="flex items-start gap-4 mb-6">
+                    <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Shield className="w-6 h-6 text-blue-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-chivo font-black mb-2 text-blue-100">Verify Your Payment</h3>
+                      <p className="text-sm text-blue-200">
+                        Enter your Transaction ID to check if payment was actually deducted from your account and received by the merchant.
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <Label>Amount (₹)</Label>
-                    <Input
-                      data-testid="transaction-amount-input"
-                      type="number"
-                      step="0.01"
-                      value={newTransaction.amount}
-                      onChange={(e) => setNewTransaction({ ...newTransaction, amount: e.target.value })}
-                      className="mt-2"
-                      placeholder="e.g., 5000"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label>Payment Method</Label>
-                    <Select
-                      value={newTransaction.payment_method}
-                      onValueChange={(v) => setNewTransaction({ ...newTransaction, payment_method: v })}
-                    >
-                      <SelectTrigger data-testid="payment-method-select" className="mt-2">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="phonepe">PhonePe</SelectItem>
-                        <SelectItem value="googlepay">Google Pay</SelectItem>
-                        <SelectItem value="paytm">Paytm</SelectItem>
-                        <SelectItem value="bhim_upi">BHIM UPI</SelectItem>
-                        <SelectItem value="debit_card">Debit Card</SelectItem>
-                        <SelectItem value="credit_card">Credit Card</SelectItem>
-                        <SelectItem value="net_banking">Net Banking</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label>Transaction Type</Label>
-                    <Select
-                      value={newTransaction.transaction_type}
-                      onValueChange={(v) => setNewTransaction({ ...newTransaction, transaction_type: v })}
-                    >
-                      <SelectTrigger data-testid="transaction-type-select" className="mt-2">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="upi_payment">UPI Payment</SelectItem>
-                        <SelectItem value="online_purchase">Online Purchase</SelectItem>
-                        <SelectItem value="bill_payment">Bill Payment</SelectItem>
-                        <SelectItem value="money_transfer">Money Transfer</SelectItem>
-                        <SelectItem value="mobile_recharge">Mobile Recharge</SelectItem>
-                        <SelectItem value="withdrawal">ATM Withdrawal</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label>Merchant Name</Label>
-                    <Input
-                      data-testid="transaction-merchant-input"
-                      type="text"
-                      value={newTransaction.merchant}
-                      onChange={(e) => setNewTransaction({ ...newTransaction, merchant: e.target.value })}
-                      className="mt-2"
-                      placeholder="e.g., Amazon India, HDFC Bank"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label>Location (City, State)</Label>
-                    <Input
-                      data-testid="transaction-location-input"
-                      type="text"
-                      value={newTransaction.location}
-                      onChange={(e) => setNewTransaction({ ...newTransaction, location: e.target.value })}
-                      className="mt-2"
-                      placeholder="e.g., Mumbai, Maharashtra"
-                      required
-                    />
-                  </div>
-                  <div className="md:col-span-2 bg-blue-950/30 border border-blue-800/30 rounded-lg p-4">
-                    <p className="text-sm text-blue-200 flex items-center gap-2">
-                      <Shield className="w-4 h-4" />
-                      <strong>National Level Verification:</strong> Transaction ID is mandatory to verify payment completion and track fund transfers across India's digital payment ecosystem.
-                    </p>
-                  </div>
-                  <div className="md:col-span-2">
-                    <Button data-testid="submit-transaction-btn" type="submit" className="w-full">
-                      Verify & Analyze Transaction
-                    </Button>
-                  </div>
-                </form>
-              </Card>
+                  
+                  <form onSubmit={verifyTransaction} className="space-y-4">
+                    <div>
+                      <Label className="text-blue-200">Enter Transaction ID</Label>
+                      <div className="flex gap-2 mt-2">
+                        <Input
+                          data-testid="verify-transaction-id-input"
+                          type="text"
+                          value={verifyTransactionId}
+                          onChange={(e) => setVerifyTransactionId(e.target.value)}
+                          className="flex-1 font-mono bg-slate-950 border-blue-800"
+                          placeholder="e.g., UPI434567891234, GPAY123456789"
+                          required
+                        />
+                        <Button data-testid="verify-transaction-btn" type="submit" className="bg-blue-600 hover:bg-blue-700">
+                          Verify Payment
+                        </Button>
+                      </div>
+                    </div>
+                  </form>
+
+                  {verificationResult && (
+                    <div className={`mt-4 p-4 rounded-lg border ${
+                      verificationResult.found 
+                        ? 'bg-green-900/20 border-green-800/50' 
+                        : 'bg-red-900/20 border-red-800/50'
+                    }`}>
+                      {verificationResult.found ? (
+                        <div>
+                          <div className="flex items-center gap-2 mb-3">
+                            <Shield className="w-5 h-5 text-green-400" />
+                            <p className="font-bold text-green-300">Payment Record Found</p>
+                          </div>
+                          <div className="space-y-2 text-sm">
+                            <p className="text-green-200">
+                              <strong>Amount Deducted:</strong> ₹{verificationResult.transaction.amount.toFixed(2)}
+                            </p>
+                            <p className="text-green-200">
+                              <strong>Merchant:</strong> {verificationResult.transaction.merchant}
+                            </p>
+                            <p className="text-green-200">
+                              <strong>Payment Method:</strong> {verificationResult.transaction.payment_method}
+                            </p>
+                            <p className="text-green-200">
+                              <strong>Status:</strong> {verificationResult.transaction.status}
+                            </p>
+                            <p className={`font-bold ${verificationResult.payment_verified ? 'text-green-300' : 'text-yellow-300'}`}>
+                              {verificationResult.verification_message}
+                            </p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <AlertTriangle className="w-5 h-5 text-red-400" />
+                            <p className="font-bold text-red-300">Transaction Not Found</p>
+                          </div>
+                          <p className="text-sm text-red-200">
+                            No payment record found with this Transaction ID. Please verify the Transaction ID is correct.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </Card>
+
+                <Card className="bg-card border border-border rounded-xl p-6 mt-8">
+                  <h3 className="text-xl font-chivo font-black mb-6">Submit New Transaction</h3>
+                  <form onSubmit={submitTransaction} className="grid md:grid-cols-2 gap-4">
+                    <div className="md:col-span-2">
+                      <Label className="text-sm font-medium flex items-center gap-2">
+                        Transaction ID <span className="text-red-500">*</span>
+                        <span className="text-xs text-muted-foreground">(UPI ID / Payment Reference)</span>
+                      </Label>
+                      <Input
+                        data-testid="transaction-id-input"
+                        type="text"
+                        value={newTransaction.transaction_id}
+                        onChange={(e) => setNewTransaction({ ...newTransaction, transaction_id: e.target.value })}
+                        className="mt-2 font-mono"
+                        placeholder="e.g., 434567891234 or UPI12345678"
+                        required
+                      />
+                      <p className="text-xs text-muted-foreground mt-1">
+                        This ID verifies payment completion from your account to merchant
+                      </p>
+                    </div>
+                    <div>
+                      <Label>Amount (₹)</Label>
+                      <Input
+                        data-testid="transaction-amount-input"
+                        type="number"
+                        step="0.01"
+                        value={newTransaction.amount}
+                        onChange={(e) => setNewTransaction({ ...newTransaction, amount: e.target.value })}
+                        className="mt-2"
+                        placeholder="e.g., 5000"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label>Payment Method</Label>
+                      <Select
+                        value={newTransaction.payment_method}
+                        onValueChange={(v) => setNewTransaction({ ...newTransaction, payment_method: v })}
+                      >
+                        <SelectTrigger data-testid="payment-method-select" className="mt-2">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="phonepe">PhonePe</SelectItem>
+                          <SelectItem value="googlepay">Google Pay</SelectItem>
+                          <SelectItem value="paytm">Paytm</SelectItem>
+                          <SelectItem value="bhim_upi">BHIM UPI</SelectItem>
+                          <SelectItem value="debit_card">Debit Card</SelectItem>
+                          <SelectItem value="credit_card">Credit Card</SelectItem>
+                          <SelectItem value="net_banking">Net Banking</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label>Transaction Type</Label>
+                      <Select
+                        value={newTransaction.transaction_type}
+                        onValueChange={(v) => setNewTransaction({ ...newTransaction, transaction_type: v })}
+                      >
+                        <SelectTrigger data-testid="transaction-type-select" className="mt-2">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="upi_payment">UPI Payment</SelectItem>
+                          <SelectItem value="online_purchase">Online Purchase</SelectItem>
+                          <SelectItem value="bill_payment">Bill Payment</SelectItem>
+                          <SelectItem value="money_transfer">Money Transfer</SelectItem>
+                          <SelectItem value="mobile_recharge">Mobile Recharge</SelectItem>
+                          <SelectItem value="withdrawal">ATM Withdrawal</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label>Merchant Name</Label>
+                      <Input
+                        data-testid="transaction-merchant-input"
+                        type="text"
+                        value={newTransaction.merchant}
+                        onChange={(e) => setNewTransaction({ ...newTransaction, merchant: e.target.value })}
+                        className="mt-2"
+                        placeholder="e.g., Amazon India, HDFC Bank"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label>Location (City, State)</Label>
+                      <Input
+                        data-testid="transaction-location-input"
+                        type="text"
+                        value={newTransaction.location}
+                        onChange={(e) => setNewTransaction({ ...newTransaction, location: e.target.value })}
+                        className="mt-2"
+                        placeholder="e.g., Mumbai, Maharashtra"
+                        required
+                      />
+                    </div>
+                    <div className="md:col-span-2 bg-blue-950/30 border border-blue-800/30 rounded-lg p-4">
+                      <p className="text-sm text-blue-200 flex items-center gap-2">
+                        <Shield className="w-4 h-4" />
+                        <strong>National Level Verification:</strong> Transaction ID is mandatory to verify payment completion and track fund transfers across India's digital payment ecosystem.
+                      </p>
+                    </div>
+                    <div className="md:col-span-2">
+                      <Button data-testid="submit-transaction-btn" type="submit" className="w-full">
+                        Verify & Analyze Transaction
+                      </Button>
+                    </div>
+                  </form>
+                </Card>
+              </>
             )}
           </div>
         )}
