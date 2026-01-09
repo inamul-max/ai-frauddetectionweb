@@ -765,9 +765,24 @@ Generated: ${new Date().toLocaleString('en-IN')}
 
         {activeView === "transactions" && (
           <div>
-            <h2 className="text-3xl font-chivo font-black mb-8">Transaction Monitor</h2>
+            <div className="flex justify-between items-center mb-8">
+              <div>
+                <h2 className="text-3xl font-chivo font-black">Transaction History</h2>
+                <p className="text-sm text-muted-foreground mt-2">
+                  Showing all {transactions.length} transaction{transactions.length !== 1 ? 's' : ''} (Complete History)
+                </p>
+              </div>
+              <Button 
+                onClick={() => setShowAllTransactions(!showAllTransactions)}
+                variant="outline"
+                className="flex items-center gap-2"
+              >
+                <Eye className="w-4 h-4" />
+                {showAllTransactions ? 'Show Recent Only' : 'Show All History'}
+              </Button>
+            </div>
             <div className="space-y-4">
-              {transactions.map((tx) => (
+              {(showAllTransactions ? transactions : transactions.slice(0, 10)).map((tx) => (
                 <Card key={tx.id} data-testid={`transaction-${tx.id}`} className="bg-card border border-border rounded-xl p-6">
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex-1">
@@ -787,8 +802,23 @@ Generated: ${new Date().toLocaleString('en-IN')}
                       <p className="text-sm text-muted-foreground">
                         {tx.merchant} • {tx.location} • {tx.payment_method} • {tx.transaction_type}
                       </p>
-                      <p className="text-xs text-muted-foreground font-mono mt-2">System ID: {tx.id}</p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        {new Date(tx.timestamp).toLocaleString('en-IN', { 
+                          year: 'numeric', month: 'long', day: 'numeric', 
+                          hour: '2-digit', minute: '2-digit' 
+                        })}
+                      </p>
+                      <p className="text-xs text-muted-foreground font-mono mt-1">System ID: {tx.id}</p>
                     </div>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      onClick={() => exportTransactionPDF(tx)}
+                      className="flex items-center gap-2"
+                    >
+                      <FileText className="w-4 h-4" />
+                      Export Receipt
+                    </Button>
                   </div>
                   {tx.ai_analysis && (
                     <div className="bg-secondary/50 rounded-md p-4 mt-4">
@@ -807,6 +837,16 @@ Generated: ${new Date().toLocaleString('en-IN')}
                   )}
                 </Card>
               ))}
+              {!showAllTransactions && transactions.length > 10 && (
+                <Card className="bg-card/50 border border-border rounded-xl p-6 text-center">
+                  <p className="text-muted-foreground mb-4">
+                    Showing 10 of {transactions.length} total transactions
+                  </p>
+                  <Button onClick={() => setShowAllTransactions(true)}>
+                    View All {transactions.length} Transactions
+                  </Button>
+                </Card>
+              )}
             </div>
           </div>
         )}
