@@ -578,74 +578,130 @@ Generated: ${new Date().toLocaleString('en-IN')}
                     <div>
                       <h3 className="text-xl font-chivo font-black mb-2 text-blue-100">Verify Your Payment</h3>
                       <p className="text-sm text-blue-200">
-                        Enter your Transaction ID to check if payment was actually deducted from your account and received by the merchant.
+                        Enter Transaction ID to check if payment was deducted from your account. Shows complete history (1 year+ old transactions).
                       </p>
                     </div>
                   </div>
                   
-                  <form onSubmit={verifyTransaction} className="space-y-4">
-                    <div>
-                      <Label className="text-blue-200">Enter Transaction ID</Label>
-                      <div className="flex gap-2 mt-2">
-                        <Input
-                          data-testid="verify-transaction-id-input"
-                          type="text"
-                          value={verifyTransactionId}
-                          onChange={(e) => setVerifyTransactionId(e.target.value)}
-                          className="flex-1 font-mono bg-slate-950 border-blue-800"
-                          placeholder="e.g., UPI434567891234, GPAY123456789"
-                          required
-                        />
-                        <Button data-testid="verify-transaction-btn" type="submit" className="bg-blue-600 hover:bg-blue-700">
-                          Verify Payment
-                        </Button>
-                      </div>
-                    </div>
-                  </form>
-
-                  {verificationResult && (
-                    <div className={`mt-4 p-4 rounded-lg border ${
-                      verificationResult.found 
-                        ? 'bg-green-900/20 border-green-800/50' 
-                        : 'bg-red-900/20 border-red-800/50'
-                    }`}>
-                      {verificationResult.found ? (
+                  <Tabs defaultValue="single" className="w-full">
+                    <TabsList className="grid w-full grid-cols-2 mb-4">
+                      <TabsTrigger value="single">Single Verification</TabsTrigger>
+                      <TabsTrigger value="bulk">Bulk Verification</TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="single">
+                      <form onSubmit={verifyTransaction} className="space-y-4">
                         <div>
-                          <div className="flex items-center gap-2 mb-3">
-                            <Shield className="w-5 h-5 text-green-400" />
-                            <p className="font-bold text-green-300">Payment Record Found</p>
-                          </div>
-                          <div className="space-y-2 text-sm">
-                            <p className="text-green-200">
-                              <strong>Amount Deducted:</strong> ₹{verificationResult.transaction.amount.toFixed(2)}
-                            </p>
-                            <p className="text-green-200">
-                              <strong>Merchant:</strong> {verificationResult.transaction.merchant}
-                            </p>
-                            <p className="text-green-200">
-                              <strong>Payment Method:</strong> {verificationResult.transaction.payment_method}
-                            </p>
-                            <p className="text-green-200">
-                              <strong>Status:</strong> {verificationResult.transaction.status}
-                            </p>
-                            <p className={`font-bold ${verificationResult.payment_verified ? 'text-green-300' : 'text-yellow-300'}`}>
-                              {verificationResult.verification_message}
-                            </p>
+                          <Label className="text-blue-200">Enter Transaction ID</Label>
+                          <div className="flex gap-2 mt-2">
+                            <Input
+                              data-testid="verify-transaction-id-input"
+                              type="text"
+                              value={verifyTransactionId}
+                              onChange={(e) => setVerifyTransactionId(e.target.value)}
+                              className="flex-1 font-mono bg-slate-950 border-blue-800"
+                              placeholder="e.g., UPI434567891234, GPAY123456789"
+                              required
+                            />
+                            <Button data-testid="verify-transaction-btn" type="submit" className="bg-blue-600 hover:bg-blue-700">
+                              Verify Payment
+                            </Button>
                           </div>
                         </div>
-                      ) : (
-                        <div>
-                          <div className="flex items-center gap-2 mb-2">
-                            <AlertTriangle className="w-5 h-5 text-red-400" />
-                            <p className="font-bold text-red-300">Transaction Not Found</p>
-                          </div>
-                          <p className="text-sm text-red-200">
-                            No payment record found with this Transaction ID. Please verify the Transaction ID is correct.
-                          </p>
+                      </form>
+
+                      {verificationResult && (
+                        <div className={`mt-4 p-4 rounded-lg border ${
+                          verificationResult.found 
+                            ? 'bg-green-900/20 border-green-800/50' 
+                            : 'bg-red-900/20 border-red-800/50'
+                        }`}>
+                          {verificationResult.found ? (
+                            <div>
+                              <div className="flex items-center gap-2 mb-3">
+                                <Shield className="w-5 h-5 text-green-400" />
+                                <p className="font-bold text-green-300">Payment Record Found</p>
+                              </div>
+                              <div className="space-y-2 text-sm">
+                                <p className="text-green-200">
+                                  <strong>Amount Deducted:</strong> ₹{verificationResult.transaction.amount.toFixed(2)}
+                                </p>
+                                <p className="text-green-200">
+                                  <strong>Merchant:</strong> {verificationResult.transaction.merchant}
+                                </p>
+                                <p className="text-green-200">
+                                  <strong>Payment Method:</strong> {verificationResult.transaction.payment_method}
+                                </p>
+                                <p className="text-green-200">
+                                  <strong>Status:</strong> {verificationResult.transaction.status}
+                                </p>
+                                <p className="text-green-200">
+                                  <strong>Date:</strong> {new Date(verificationResult.transaction.timestamp).toLocaleString('en-IN')}
+                                </p>
+                                <p className={`font-bold ${verificationResult.payment_verified ? 'text-green-300' : 'text-yellow-300'}`}>
+                                  {verificationResult.verification_message}
+                                </p>
+                              </div>
+                            </div>
+                          ) : (
+                            <div>
+                              <div className="flex items-center gap-2 mb-2">
+                                <AlertTriangle className="w-5 h-5 text-red-400" />
+                                <p className="font-bold text-red-300">Transaction Not Found</p>
+                              </div>
+                              <p className="text-sm text-red-200">
+                                No payment record found. Please verify the Transaction ID is correct.
+                              </p>
+                            </div>
+                          )}
                         </div>
                       )}
-                    </div>
-                  )}
+                    </TabsContent>
+
+                    <TabsContent value="bulk">
+                      <form onSubmit={verifyBulkTransactions} className="space-y-4">
+                        <div>
+                          <Label className="text-blue-200">Enter Multiple Transaction IDs (one per line or comma-separated)</Label>
+                          <textarea
+                            data-testid="bulk-transaction-ids-input"
+                            value={bulkTransactionIds}
+                            onChange={(e) => setBulkTransactionIds(e.target.value)}
+                            className="w-full mt-2 min-h-32 p-3 bg-slate-950 border border-blue-800 rounded-md font-mono text-sm"
+                            placeholder="UPI434567891234&#10;GPAY123456789&#10;PTM999888777666"
+                            required
+                          />
+                        </div>
+                        <Button data-testid="verify-bulk-btn" type="submit" className="w-full bg-blue-600 hover:bg-blue-700">
+                          Verify All Transactions
+                        </Button>
+                      </form>
+
+                      {bulkVerificationResult && (
+                        <div className="mt-4 p-4 rounded-lg border bg-slate-900/50 border-blue-800/50">
+                          <div className="flex items-center gap-2 mb-3">
+                            <Shield className="w-5 h-5 text-blue-400" />
+                            <p className="font-bold text-blue-300">
+                              Bulk Verification Complete: {bulkVerificationResult.total_found}/{bulkVerificationResult.total_checked} Found
+                            </p>
+                          </div>
+                          <div className="space-y-2 max-h-64 overflow-y-auto">
+                            {bulkVerificationResult.results.map((result, idx) => (
+                              <div key={idx} className={`p-2 rounded text-sm ${
+                                result.found ? 'bg-green-900/20 border border-green-800/50' : 'bg-red-900/20 border border-red-800/50'
+                              }`}>
+                                <p className="font-mono font-bold">{result.transaction_id}</p>
+                                {result.found ? (
+                                  <p className="text-green-300">✓ ₹{result.amount} - {result.merchant} - {result.status}</p>
+                                ) : (
+                                  <p className="text-red-300">✗ Not Found</p>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </TabsContent>
+                  </Tabs>
                 </Card>
 
                 <Card className="bg-card border border-border rounded-xl p-6 mt-8">
