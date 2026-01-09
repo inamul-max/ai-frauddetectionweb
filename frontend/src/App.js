@@ -271,6 +271,8 @@ const Dashboard = ({ user, token, onLogout }) => {
   const [cases, setCases] = useState([]);
   const [stats, setStats] = useState(null);
   const [activeView, setActiveView] = useState("overview");
+  const [verifyTransactionId, setVerifyTransactionId] = useState("");
+  const [verificationResult, setVerificationResult] = useState(null);
   const [newTransaction, setNewTransaction] = useState({
     transaction_id: "",
     amount: "",
