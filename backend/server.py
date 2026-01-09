@@ -285,9 +285,9 @@ async def create_transaction(transaction_data: TransactionCreate, current_user: 
 @api_router.get("/transactions", response_model=List[Transaction])
 async def get_transactions(current_user: User = Depends(get_current_user)):
     if current_user.role == "user":
-        transactions = await db.transactions.find({"user_id": current_user.id}, {"_id": 0}).sort("timestamp", -1).to_list(100)
+        transactions = await db.transactions.find({"user_id": current_user.id}, {"_id": 0}).sort("timestamp", -1).to_list(None)
     else:
-        transactions = await db.transactions.find({}, {"_id": 0}).sort("timestamp", -1).to_list(100)
+        transactions = await db.transactions.find({}, {"_id": 0}).sort("timestamp", -1).to_list(None)
     return transactions
 
 @api_router.get("/transactions/verify/{transaction_id}")
@@ -303,6 +303,27 @@ async def verify_transaction(transaction_id: str, current_user: User = Depends(g
         "status": transaction['status'],
         "payment_verified": transaction['payment_verified']
     }
+
+@api_router.post("/transactions/verify-bulk")
+async def verify_bulk_transactions(transaction_ids: List[str], current_user: User = Depends(get_current_user)):
+    results = []
+    for txn_id in transaction_ids:
+        transaction = await db.transactions.find_one({"transaction_id": txn_id, "user_id": current_user.id}, {"_id": 0})
+        if transaction:
+            results.append({
+                "transaction_id": txn_id,
+                "found": True,
+                "amount": transaction['amount'],
+                "merchant": transaction['merchant'],
+                "status": transaction['status'],
+                "payment_verified": transaction['payment_verified']
+            })
+        else:
+            results.append({
+                "transaction_id": txn_id,
+                "found": False
+            })
+    return {"results": results, "total_checked": len(transaction_ids), "total_found": sum(1 for r in results if r['found'])}
 
 @api_router.get("/fraud-alerts", response_model=List[FraudAlert])
 async def get_fraud_alerts(current_user: User = Depends(get_current_user)):
