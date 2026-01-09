@@ -124,18 +124,25 @@ async def analyze_fraud_with_ai(transaction: dict) -> dict:
             system_message="You are an expert fraud detection AI. Analyze transactions and identify potential fraud patterns."
         ).with_model("gemini", "gemini-3-flash-preview")
         
-        prompt = f"""Analyze this transaction for fraud:
+        prompt = f"""Analyze this transaction for fraud across ALL categories:
 - Amount: ${transaction['amount']}
 - Type: {transaction['transaction_type']}
 - Merchant: {transaction['merchant']}
 - Location: {transaction['location']}
 - Time: {transaction['timestamp']}
 
+Evaluate for these specific fraud types:
+1. Credit/Debit Card Fraud - unauthorized card usage, skimming
+2. Banking Fraud - suspicious account activity, unauthorized transfers
+3. Insurance Claim Fraud - fraudulent claims, exaggerated damages
+4. Identity Theft - account takeover, synthetic identity
+5. E-commerce/Payment Fraud - chargeback fraud, account abuse
+
 Provide:
 1. Risk score (0-100)
 2. Risk level (low/medium/high)
-3. Potential fraud types (financial, identity theft, card fraud, insurance, e-commerce)
-4. Brief analysis (2-3 sentences)
+3. Detected fraud types from above categories (use exact names)
+4. Brief analysis (2-3 sentences explaining the risk)
 
 Format: RISK_SCORE:XX|RISK_LEVEL:xxx|FRAUD_TYPES:type1,type2|ANALYSIS:your analysis"""
         
