@@ -54,8 +54,10 @@ class Transaction(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     user_id: str
+    transaction_id: str
     amount: float
     transaction_type: str
+    payment_method: str
     merchant: str
     location: str
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
@@ -63,11 +65,14 @@ class Transaction(BaseModel):
     risk_level: str = "low"
     fraud_types: List[str] = []
     status: str = "pending"
+    payment_verified: bool = False
     ai_analysis: Optional[str] = None
 
 class TransactionCreate(BaseModel):
+    transaction_id: str
     amount: float
     transaction_type: str
+    payment_method: str
     merchant: str
     location: str
 
