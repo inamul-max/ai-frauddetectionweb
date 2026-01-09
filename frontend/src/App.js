@@ -493,10 +493,13 @@ const Dashboard = ({ user, token, onLogout }) => {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="payment">Payment</SelectItem>
-                        <SelectItem value="transfer">Transfer</SelectItem>
+                        <SelectItem value="credit_card">Credit Card Payment</SelectItem>
+                        <SelectItem value="debit_card">Debit Card Payment</SelectItem>
+                        <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
                         <SelectItem value="withdrawal">Withdrawal</SelectItem>
-                        <SelectItem value="purchase">Purchase</SelectItem>
+                        <SelectItem value="insurance_claim">Insurance Claim</SelectItem>
+                        <SelectItem value="online_purchase">Online Purchase</SelectItem>
+                        <SelectItem value="account_opening">Account Opening</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -508,6 +511,7 @@ const Dashboard = ({ user, token, onLogout }) => {
                       value={newTransaction.merchant}
                       onChange={(e) => setNewTransaction({ ...newTransaction, merchant: e.target.value })}
                       className="mt-2"
+                      placeholder="e.g., Amazon, Bank of America, State Farm"
                       required
                     />
                   </div>
@@ -519,12 +523,13 @@ const Dashboard = ({ user, token, onLogout }) => {
                       value={newTransaction.location}
                       onChange={(e) => setNewTransaction({ ...newTransaction, location: e.target.value })}
                       className="mt-2"
+                      placeholder="e.g., New York, USA"
                       required
                     />
                   </div>
                   <div className="md:col-span-2">
                     <Button data-testid="submit-transaction-btn" type="submit" className="w-full">
-                      Submit for AI Analysis
+                      Submit for AI Fraud Analysis
                     </Button>
                   </div>
                 </form>
