@@ -307,7 +307,21 @@ const Dashboard = ({ user, token, onLogout }) => {
         setCases(casesResponse.data);
       }
     } catch (error) {
-      toast.error("Failed to load data");
+      console.error("Failed to load data:", error);
+    }
+  };
+
+  const verifyTransaction = async (e) => {
+    e.preventDefault();
+    setVerificationResult(null);
+    try {
+      const config = { headers: { Authorization: `Bearer ${token}` } };
+      const response = await axios.get(`${API}/transactions/verify/${verifyTransactionId}`, config);
+      setVerificationResult(response.data);
+      toast.success("Transaction found and verified!");
+    } catch (error) {
+      setVerificationResult({ found: false, error: error.response?.data?.detail || "Transaction not found" });
+      toast.error("Transaction ID not found. Please check and try again.");
     }
   };
 
