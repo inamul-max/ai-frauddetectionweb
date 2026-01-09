@@ -269,8 +269,10 @@ const Dashboard = ({ user, token, onLogout }) => {
   const [stats, setStats] = useState(null);
   const [activeView, setActiveView] = useState("overview");
   const [newTransaction, setNewTransaction] = useState({
+    transaction_id: "",
     amount: "",
-    transaction_type: "credit_card",
+    transaction_type: "upi_payment",
+    payment_method: "phonepe",
     merchant: "",
     location: "",
   });
