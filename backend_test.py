@@ -122,10 +122,14 @@ class FraudDetectionAPITester:
             return
         
         test_transactions = [
-            {"amount": 50.0, "transaction_type": "payment", "merchant": "Coffee Shop", "location": "New York"},
-            {"amount": 500.0, "transaction_type": "transfer", "merchant": "Bank Transfer", "location": "Online"},
-            {"amount": 5000.0, "transaction_type": "withdrawal", "merchant": "ATM Withdrawal", "location": "Los Angeles"},
-            {"amount": 50000.0, "transaction_type": "purchase", "merchant": "Unknown Merchant", "location": "Suspicious Location"}
+            # Test new specific transaction types from the review request
+            {"amount": 10000.0, "transaction_type": "credit_card", "merchant": "Unknown Merchant", "location": "Nigeria"},
+            {"amount": 500.0, "transaction_type": "insurance_claim", "merchant": "State Farm", "location": "New York"},
+            {"amount": 50.0, "transaction_type": "debit_card", "merchant": "Coffee Shop", "location": "New York"},
+            {"amount": 2500.0, "transaction_type": "bank_transfer", "merchant": "International Bank", "location": "Online"},
+            {"amount": 150.0, "transaction_type": "online_purchase", "merchant": "Amazon", "location": "Seattle"},
+            {"amount": 1000.0, "transaction_type": "withdrawal", "merchant": "ATM", "location": "Los Angeles"},
+            {"amount": 0.0, "transaction_type": "account_opening", "merchant": "Chase Bank", "location": "Miami"}
         ]
         
         for i, tx_data in enumerate(test_transactions):
