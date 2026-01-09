@@ -235,8 +235,10 @@ async def login(credentials: UserLogin):
 async def create_transaction(transaction_data: TransactionCreate, current_user: User = Depends(get_current_user)):
     transaction = Transaction(
         user_id=current_user.id,
+        transaction_id=transaction_data.transaction_id,
         amount=transaction_data.amount,
         transaction_type=transaction_data.transaction_type,
+        payment_method=transaction_data.payment_method,
         merchant=transaction_data.merchant,
         location=transaction_data.location
     )
@@ -252,6 +254,7 @@ async def create_transaction(transaction_data: TransactionCreate, current_user: 
     
     if ai_result['risk_score'] > 70:
         transaction_dict['status'] = 'flagged'
+        transaction_dict['payment_verified'] = False
         alert = FraudAlert(
             transaction_id=transaction_dict['id'],
             severity='high' if ai_result['risk_score'] > 85 else 'medium',
@@ -263,6 +266,7 @@ async def create_transaction(transaction_data: TransactionCreate, current_user: 
         await db.fraud_alerts.insert_one(alert_dict)
     else:
         transaction_dict['status'] = 'approved'
+        transaction_dict['payment_verified'] = True
     
     await db.transactions.insert_one(transaction_dict)
     return Transaction(**transaction_dict)
