@@ -453,11 +453,11 @@ const Dashboard = ({ user, token, onLogout }) => {
                 </Card>
 
                 <Card className="bg-card border border-border rounded-xl p-6">
-                  <h3 className="text-xl font-chivo font-black mb-6">Fraud Types Detected</h3>
+                  <h3 className="text-xl font-chivo font-black mb-6">Fraud Categories Detected</h3>
                   <ResponsiveContainer width="100%" height={250}>
-                    <BarChart data={stats.fraud_types}>
+                    <BarChart data={stats.fraud_types.slice(0, 5)}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                      <XAxis dataKey="type" stroke="#94a3b8" />
+                      <XAxis dataKey="type" stroke="#94a3b8" angle={-45} textAnchor="end" height={80} fontSize={10} />
                       <YAxis stroke="#94a3b8" />
                       <Tooltip contentStyle={{ backgroundColor: "#0f172a", border: "1px solid #1e293b" }} />
                       <Bar dataKey="count" fill="#3b82f6" />
@@ -466,6 +466,34 @@ const Dashboard = ({ user, token, onLogout }) => {
                 </Card>
               </div>
             )}
+
+            <div className="grid md:grid-cols-5 gap-4 mt-6">
+              <Card className="bg-gradient-to-br from-blue-900/30 to-blue-950/30 border border-blue-800/30 rounded-xl p-6 hover:border-blue-700/50 transition-colors">
+                <Shield className="w-8 h-8 text-blue-400 mb-3" />
+                <p className="text-xs text-blue-200 mb-1">Card Fraud</p>
+                <p className="text-sm text-blue-100">Detection Active</p>
+              </Card>
+              <Card className="bg-gradient-to-br from-purple-900/30 to-purple-950/30 border border-purple-800/30 rounded-xl p-6 hover:border-purple-700/50 transition-colors">
+                <Activity className="w-8 h-8 text-purple-400 mb-3" />
+                <p className="text-xs text-purple-200 mb-1">Banking Fraud</p>
+                <p className="text-sm text-purple-100">Monitoring Active</p>
+              </Card>
+              <Card className="bg-gradient-to-br from-green-900/30 to-green-950/30 border border-green-800/30 rounded-xl p-6 hover:border-green-700/50 transition-colors">
+                <FileText className="w-8 h-8 text-green-400 mb-3" />
+                <p className="text-xs text-green-200 mb-1">Insurance Claims</p>
+                <p className="text-sm text-green-100">AI Analyzing</p>
+              </Card>
+              <Card className="bg-gradient-to-br from-orange-900/30 to-orange-950/30 border border-orange-800/30 rounded-xl p-6 hover:border-orange-700/50 transition-colors">
+                <User className="w-8 h-8 text-orange-400 mb-3" />
+                <p className="text-xs text-orange-200 mb-1">Identity Theft</p>
+                <p className="text-sm text-orange-100">Protected</p>
+              </Card>
+              <Card className="bg-gradient-to-br from-pink-900/30 to-pink-950/30 border border-pink-800/30 rounded-xl p-6 hover:border-pink-700/50 transition-colors">
+                <TrendingUp className="w-8 h-8 text-pink-400 mb-3" />
+                <p className="text-xs text-pink-200 mb-1">E-commerce</p>
+                <p className="text-sm text-pink-100">Secure</p>
+              </Card>
+            </div>
 
             {user.role === "user" && (
               <Card className="bg-card border border-border rounded-xl p-6 mt-8">
