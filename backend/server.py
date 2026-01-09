@@ -242,6 +242,30 @@ async def login(credentials: UserLogin):
         }
     }
 
+async def send_fraud_alert_email(user_email: str, transaction: dict):
+    """Send email alert for high-risk transactions"""
+    try:
+        # In production, integrate with SendGrid, AWS SES, or other email service
+        # For now, we'll log the alert
+        logging.info(f"""
+        FRAUD ALERT EMAIL:
+        To: {user_email}
+        Subject: 🚨 High-Risk Transaction Detected
+        
+        A high-risk transaction has been detected on your account:
+        - Amount: ₹{transaction['amount']}
+        - Transaction ID: {transaction['transaction_id']}
+        - Merchant: {transaction['merchant']}
+        - Risk Score: {transaction['risk_score']}%
+        - Status: FLAGGED FOR REVIEW
+        
+        Please verify this transaction immediately.
+        """)
+        return True
+    except Exception as e:
+        logging.error(f"Failed to send email alert: {e}")
+        return False
+
 @api_router.post("/transactions", response_model=Transaction)
 async def create_transaction(transaction_data: TransactionCreate, current_user: User = Depends(get_current_user)):
     transaction = Transaction(
@@ -275,6 +299,9 @@ async def create_transaction(transaction_data: TransactionCreate, current_user: 
         alert_dict = alert.model_dump()
         alert_dict['timestamp'] = alert_dict['timestamp'].isoformat()
         await db.fraud_alerts.insert_one(alert_dict)
+        
+        # Send email alert for high-risk transactions
+        await send_fraud_alert_email(current_user.email, transaction_dict)
     else:
         transaction_dict['status'] = 'approved'
         transaction_dict['payment_verified'] = True
