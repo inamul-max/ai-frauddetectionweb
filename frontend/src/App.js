@@ -621,24 +621,30 @@ const Dashboard = ({ user, token, onLogout }) => {
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <p className="font-chivo font-black text-xl">${tx.amount.toFixed(2)}</p>
+                        <p className="font-chivo font-black text-2xl text-primary">₹{tx.amount.toFixed(2)}</p>
                         <Badge className={getRiskColor(tx.risk_level)}>
                           {tx.risk_level} - {tx.risk_score.toFixed(0)}%
                         </Badge>
                         <Badge variant={tx.status === "flagged" ? "destructive" : "default"}>{tx.status}</Badge>
+                        {tx.payment_verified && <Badge variant="outline" className="bg-green-900/20 text-green-400">Verified ✓</Badge>}
+                      </div>
+                      <div className="bg-slate-900/50 rounded-md px-3 py-2 mb-2 inline-block">
+                        <p className="text-sm font-mono text-blue-400">
+                          Transaction ID: <span className="font-bold">{tx.transaction_id}</span>
+                        </p>
                       </div>
                       <p className="text-sm text-muted-foreground">
-                        {tx.merchant} • {tx.location} • {tx.transaction_type}
+                        {tx.merchant} • {tx.location} • {tx.payment_method} • {tx.transaction_type}
                       </p>
-                      <p className="text-xs text-muted-foreground font-mono mt-2">ID: {tx.id}</p>
+                      <p className="text-xs text-muted-foreground font-mono mt-2">System ID: {tx.id}</p>
                     </div>
                   </div>
                   {tx.ai_analysis && (
                     <div className="bg-secondary/50 rounded-md p-4 mt-4">
-                      <p className="text-sm font-medium mb-2">AI Analysis:</p>
+                      <p className="text-sm font-medium mb-2">AI Fraud Analysis:</p>
                       <p className="text-sm text-muted-foreground">{tx.ai_analysis}</p>
-                      {tx.fraud_types.length > 0 && (
-                        <div className="flex gap-2 mt-3">
+                      {tx.fraud_types && tx.fraud_types.length > 0 && (
+                        <div className="flex gap-2 mt-3 flex-wrap">
                           {tx.fraud_types.map((type) => (
                             <Badge key={type} variant="outline" className="text-xs">
                               {type}
