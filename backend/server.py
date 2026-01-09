@@ -129,27 +129,38 @@ async def analyze_fraud_with_ai(transaction: dict) -> dict:
             system_message="You are an expert fraud detection AI. Analyze transactions and identify potential fraud patterns."
         ).with_model("gemini", "gemini-3-flash-preview")
         
-        prompt = f"""Analyze this transaction for fraud across ALL categories:
-- Amount: ${transaction['amount']}
+        prompt = f"""Analyze this Indian payment transaction for fraud across ALL categories:
+- Amount: ₹{transaction['amount']}
+- Transaction ID: {transaction.get('transaction_id', 'N/A')}
+- Payment Method: {transaction.get('payment_method', 'N/A')}
 - Type: {transaction['transaction_type']}
 - Merchant: {transaction['merchant']}
 - Location: {transaction['location']}
 - Time: {transaction['timestamp']}
+
+IMPORTANT: This is an Indian payment system transaction. Consider UPI fraud patterns, PhonePe/Google Pay/Paytm verification issues, and Indian banking fraud patterns.
 
 Evaluate for these specific fraud types:
 1. Credit/Debit Card Fraud - unauthorized card usage, skimming
 2. Banking Fraud - suspicious account activity, unauthorized transfers
 3. Insurance Claim Fraud - fraudulent claims, exaggerated damages
 4. Identity Theft - account takeover, synthetic identity
-5. E-commerce/Payment Fraud - chargeback fraud, account abuse
+5. E-commerce/Payment Fraud - chargeback fraud, UPI fraud, payment gateway fraud
+
+Check if:
+- Transaction ID appears valid and not duplicated
+- Payment method matches transaction type
+- Amount is consistent with merchant type
+- Location is valid for Indian context
 
 Provide:
 1. Risk score (0-100)
 2. Risk level (low/medium/high)
 3. Detected fraud types from above categories (use exact names)
-4. Brief analysis (2-3 sentences explaining the risk)
+4. Payment verification status (verified/suspicious/failed)
+5. Brief analysis (2-3 sentences explaining the risk in Indian context)
 
-Format: RISK_SCORE:XX|RISK_LEVEL:xxx|FRAUD_TYPES:type1,type2|ANALYSIS:your analysis"""
+Format: RISK_SCORE:XX|RISK_LEVEL:xxx|FRAUD_TYPES:type1,type2|PAYMENT_STATUS:xxx|ANALYSIS:your analysis"""
         
         user_message = UserMessage(text=prompt)
         response = await chat.send_message(user_message)
