@@ -252,7 +252,7 @@ const Dashboard = ({ user, token, onLogout }) => {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [token]); // Added token dependency
 
   const loadData = async () => {
     try {
