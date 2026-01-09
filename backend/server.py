@@ -290,6 +290,20 @@ async def get_transactions(current_user: User = Depends(get_current_user)):
         transactions = await db.transactions.find({}, {"_id": 0}).sort("timestamp", -1).to_list(100)
     return transactions
 
+@api_router.get("/transactions/verify/{transaction_id}")
+async def verify_transaction(transaction_id: str, current_user: User = Depends(get_current_user)):
+    transaction = await db.transactions.find_one({"transaction_id": transaction_id, "user_id": current_user.id}, {"_id": 0})
+    if not transaction:
+        raise HTTPException(status_code=404, detail="Transaction not found. Please verify your Transaction ID.")
+    
+    return {
+        "found": True,
+        "transaction": transaction,
+        "verification_message": f"Payment verified: ₹{transaction['amount']} was {'successfully processed' if transaction['payment_verified'] else 'flagged for review'}.",
+        "status": transaction['status'],
+        "payment_verified": transaction['payment_verified']
+    }
+
 @api_router.get("/fraud-alerts", response_model=List[FraudAlert])
 async def get_fraud_alerts(current_user: User = Depends(get_current_user)):
     if current_user.role not in ["admin", "analyst"]:
