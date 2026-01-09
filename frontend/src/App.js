@@ -67,10 +67,13 @@ const LandingPage = ({ onShowAuth }) => {
                 <h2 className="text-5xl lg:text-6xl font-chivo font-black leading-tight mb-8">
                   Real-Time <br />
                   <span className="text-primary">Fraud Detection</span><br />
-                  Powered by AI
+                  for India's Digital Payments
                 </h2>
-                <p className="text-lg text-muted-foreground mb-8">
-                  Protect your organization from financial fraud, identity theft, and suspicious transactions with cutting-edge AI technology.
+                <p className="text-lg text-muted-foreground mb-4">
+                  Protect your organization from UPI fraud, PhonePe scams, Paytm frauds, and suspicious transactions with cutting-edge AI technology.
+                </p>
+                <p className="text-sm text-blue-400 mb-8">
+                  National-level verification system for PhonePe • Google Pay • Paytm • BHIM UPI • Net Banking
                 </p>
                 <Button data-testid="get-started-btn" onClick={onShowAuth} size="lg" className="bg-primary hover:bg-primary/90 text-white rounded-md px-8 py-6 font-medium hover:shadow-[0_0_20px_rgba(59,130,246,0.5)]">
                   Get Started
