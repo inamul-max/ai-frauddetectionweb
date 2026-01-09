@@ -328,6 +328,55 @@ const Dashboard = ({ user, token, onLogout }) => {
     }
   };
 
+  const verifyBulkTransactions = async (e) => {
+    e.preventDefault();
+    setBulkVerificationResult(null);
+    try {
+      const config = { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } };
+      const ids = bulkTransactionIds.split(/[\n,]/).map(id => id.trim()).filter(id => id);
+      const response = await axios.post(`${API}/transactions/verify-bulk`, ids, config);
+      setBulkVerificationResult(response.data);
+      toast.success(`Verified ${response.data.total_found} out of ${response.data.total_checked} transactions`);
+    } catch (error) {
+      toast.error("Failed to verify bulk transactions");
+    }
+  };
+
+  const exportTransactionPDF = (transaction) => {
+    const pdfContent = `
+TRANSACTION VERIFICATION RECEIPT
+════════════════════════════════════════
+
+Transaction ID: ${transaction.transaction_id}
+Amount: ₹${transaction.amount}
+Merchant: ${transaction.merchant}
+Location: ${transaction.location}
+Payment Method: ${transaction.payment_method}
+Transaction Type: ${transaction.transaction_type}
+Status: ${transaction.status}
+Payment Verified: ${transaction.payment_verified ? 'YES' : 'NO'}
+Risk Level: ${transaction.risk_level}
+Risk Score: ${transaction.risk_score}%
+
+Date: ${new Date(transaction.timestamp).toLocaleString('en-IN')}
+
+AI Analysis:
+${transaction.ai_analysis}
+
+════════════════════════════════════════
+SafeGuard AI - National Payment Verification System
+Generated: ${new Date().toLocaleString('en-IN')}
+    `;
+    
+    const blob = new Blob([pdfContent], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `transaction_${transaction.transaction_id}.txt`;
+    a.click();
+    toast.success("Receipt downloaded!");
+  };
+
   const submitTransaction = async (e) => {
     e.preventDefault();
     try {
