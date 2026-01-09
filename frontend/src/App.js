@@ -310,7 +310,7 @@ const Dashboard = ({ user, token, onLogout }) => {
       const config = { headers: { Authorization: `Bearer ${token}` } };
       await axios.post(`${API}/transactions`, newTransaction, config);
       toast.success("Transaction submitted for analysis!");
-      setNewTransaction({ amount: "", transaction_type: "payment", merchant: "", location: "" });
+      setNewTransaction({ amount: "", transaction_type: "credit_card", merchant: "", location: "" });
       loadData();
     } catch (error) {
       toast.error("Failed to submit transaction");
