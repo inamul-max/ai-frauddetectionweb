@@ -656,11 +656,11 @@ const Dashboard = ({ user, token, onLogout }) => {
 };
 
 function App() {
+  const [showAuth, setShowAuth] = useState(false);
+
   return (
     <AuthContext>
       {({ user, token, login, logout }) => {
-        const [showAuth, setShowAuth] = useState(false);
-
         return (
           <div className="App">
             <Toaster />
