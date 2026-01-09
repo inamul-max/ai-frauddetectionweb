@@ -32,3 +32,10 @@ select:focus {
 .recharts-tooltip-wrapper {
   outline: none;
 }
+
+#emergent-badge {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
